@@ -28,7 +28,7 @@
  * extraerTitulos(notas) // ['Nota uno', 'Nota dos']
  */
 function extraerTitulos(notas) {
-  // Tu código aquí
+  return notas.map((nota) => nota.title);
 }
 
 /**
@@ -46,7 +46,10 @@ function extraerTitulos(notas) {
  * // [{ id: 1, title: 'Nota', fechaCreacion: 1700000000000 }]
  */
 function agregarFechaCreacion(notas) {
-  // Tu código aquí
+  return notas.map((nota) => ({
+    ...nota,
+    fechaCreacion: Date.now(),
+  }));
 }
 
 /**
@@ -66,7 +69,7 @@ function agregarFechaCreacion(notas) {
  * filtrarFavoritas(notas) // [{ id: 1, title: 'Fav', esFavorita: true }]
  */
 function filtrarFavoritas(notas) {
-  // Tu código aquí
+  return notas.filter((nota) => nota.esFavorita);
 }
 
 /**
@@ -87,7 +90,9 @@ function filtrarFavoritas(notas) {
  * buscarPorTitulo(notas, 'importante') // [{ id: 1, title: 'Nota Importante' }]
  */
 function buscarPorTitulo(notas, busqueda) {
-  // Tu código aquí
+  return notas.filter((nota) =>
+  nota.title.toLowerCase().includes(busqueda.toLowerCase())
+  );
 }
 
 /**
@@ -107,7 +112,12 @@ function buscarPorTitulo(notas, busqueda) {
  * // [{ id: 1, nombre: 'Camisa', precio: 100, precioFinal: 80 }]
  */
 function aplicarDescuento(productos, porcentajeDescuento) {
-  // Tu código aquí
+  return productos.map((producto) => ({
+    ...producto,
+    precioFinal:
+    producto.precio -
+    (producto.precio * porcentajeDescuento) / 100
+  }));
 }
 
 /**
@@ -130,11 +140,15 @@ function aplicarDescuento(productos, porcentajeDescuento) {
  * filtrarPorRango(productos, 100, 200) // [{ nombre: 'B', precio: 150 }]
  */
 function filtrarPorRango(productos, min, max) {
-  // Tu código aquí
+  return productos.filter(
+    (producto) =>
+      producto.precio >= min &&
+    producto.precio <= max
+  );
 }
 
 // Exportar todas las funciones para los tests
-module.exports = {
+export {
   extraerTitulos,
   agregarFechaCreacion,
   filtrarFavoritas,
