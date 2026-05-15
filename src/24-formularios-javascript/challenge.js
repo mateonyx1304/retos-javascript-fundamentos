@@ -1,32 +1,61 @@
 function prevenirEnvioPorDefecto(evento) {
-  // Tu código aquí
+  evento.preventDefault = true;
+  return evento;
 }
 
 function extraerDatosFormulario(formulario) {
-  // Tu código aquí
+  const payload = {
+    name: formulario.name,
+    message: formulario.message,
+  };
+  return payload;
 }
 
 function guardarEnLocalStorage(datos) {
-  // Tu código aquí
+  const clave = 'contact-form';
+  const datosString = JSON.stringify(datos);
 }
 
 function leerDesdeLocalStorage() {
-  // Tu código aquí
+  const clave = 'contact-form';
+  return null;
 }
 
 function crearObjetoConTimestamp(nombre, mensaje) {
-  // Tu código aquí
+  return {
+    name: nombre,
+    message: mensaje,
+    date: new Date().toISOString(),
+  };
 }
 
 function renderizarMensajeGuardado(datos) {
-  // Tu código aquí
+ if (!datos) return '';
+  return `
+    <p><strong>Último mensaje guardado:</strong></p>
+    <p><strong>Nombre:</strong> ${datos.name}</p>
+    <p><strong>Mensaje:</strong> ${datos.message}</p>
+  `;
 }
 
 function validarFormulario(nombre, mensaje) {
-  // Tu código aquí
+  const errores = [];
+  
+  if (!nombre || nombre.length < 2) {
+    errores.push('El nombre debe tener al menos 2 caracteres');
+  }
+  
+  if (!mensaje || mensaje.length < 10) {
+    errores.push('El mensaje debe tener al menos 10 caracteres');
+  }
+  
+  return {
+    valido: errores.length === 0,
+    errores: errores,
+  };
 }
 
-module.exports = {
+export {
   prevenirEnvioPorDefecto,
   extraerDatosFormulario,
   guardarEnLocalStorage,
