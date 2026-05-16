@@ -9,7 +9,8 @@
 // Declara una constante llamada STORAGE_KEY con el valor 'markdown-notes'
 // y retórnala.
 function obtenerStorageKey() {
-  // Tu código aquí
+  const STORAGE_KEY = 'markdown-notes';
+  return STORAGE_KEY;
 }
 
 // --- Reto 2: Guardar datos en localStorage ---
@@ -18,7 +19,13 @@ function obtenerStorageKey() {
 // Usa JSON.stringify para serializar los datos.
 // Usa localStorage.setItem con la clave global.
 function guardarNotas(notes) {
-  // Tu código aquí
+  if (notes === undefined || notes === null) {
+    console.error('No se pueden guardar notas, datos inválidos');
+    return;
+  }
+  const STORAGE_KEY = 'markdown-notes';
+  const notesJSON = JSON.stringify(notes);
+  localStorage.setItem(STORAGE_KEY, notesJSON);
 }
 
 // --- Reto 3: Cargar datos desde localStorage ---
@@ -27,7 +34,20 @@ function guardarNotas(notes) {
 // Usa JSON.parse para convertir los datos.
 // Verifica que el resultado sea un array con Array.isArray.
 function cargarNotas() {
-  // Tu código aquí
+  const STORAGE_KEY = 'markdown-notes';
+  const notesJSON = localStorage.getItem(STORAGE_KEY);
+
+  if (notesJSON === null || notesJSON === undefined) {
+    return [];
+  }
+
+  let notes = [];
+  const parsedNotes = JSON.parse(notesJSON);
+  if (Array.isArray(parsedNotes)) {
+    notes = parsedNotes;
+  }
+
+  return notes;
 }
 
 // --- Reto 4: Validar datos antes de guardar ---
@@ -35,31 +55,41 @@ function cargarNotas() {
 // Si no es un array, muestra un error con console.error y retorna false.
 // Si es válido, llama a guardarNotas y retorna true.
 function validarYGuardar(notes) {
-  // Tu código aquí
+  if (!Array.isArray(notes)) {
+    console.error('Los datos deben ser un array');
+    return false;
+  }
+
+  guardarNotas(notes);
+  return true;
 }
 
 // --- Reto 5: Limpiar localStorage ---
 // Crea una función que elimine todos los datos del localStorage
 // usando localStorage.removeItem con la clave global.
 function limpiarStorage() {
-  // Tu código aquí
+  const STORAGE_KEY = 'markdown-notes';
+  localStorage.removeItem(STORAGE_KEY);
 }
 
 // --- Reto 6: Verificar si existen datos ---
 // Crea una función que verifique si existen datos en localStorage.
 // Retorna true si hay datos, false si no hay datos o es null.
 function existenDatos() {
-  // Tu código aquí
+  const STORAGE_KEY = 'markdown-notes';
+  const notesJSON = localStorage.getItem(STORAGE_KEY);
+  return notesJSON !== null && notesJSON !== undefined;
 }
 
 // --- Reto 7: Obtener cantidad de notas ---
 // Carga las notas desde localStorage y retorna la cantidad.
 // Si no hay notas, retorna 0.
 function obtenerCantidadNotas() {
-  // Tu código aquí
+  const notes = cargarNotas();
+  return notes.length;
 }
 
-module.exports = {
+export {
   obtenerStorageKey,
   guardarNotas,
   cargarNotas,
