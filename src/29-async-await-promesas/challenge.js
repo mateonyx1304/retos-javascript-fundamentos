@@ -6,7 +6,9 @@
  * Debe usar setTimeout y new Promise
  */
 function esperar(ms) {
-  // Tu código aquí
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 /**
@@ -15,7 +17,8 @@ function esperar(ms) {
  * Después de 100ms debe retornar { id: 1, nombre: "Usuario" }
  */
 async function obtenerUsuario() {
-  // Tu código aquí
+  await esperar(100);
+  return { id: 1, nombre: 'Usuario'};
 }
 
 /**
@@ -24,7 +27,8 @@ async function obtenerUsuario() {
  * Usa esperar(150) y retorna { usuarioId, notas: [10, 9, 8] }
  */
 async function obtenerNotas(usuarioId) {
-  // Tu código aquí
+  await esperar(150);
+  return { usuarioId, notas: [10, 9, 8] };
 }
 
 /**
@@ -33,7 +37,9 @@ async function obtenerNotas(usuarioId) {
  * Usa esperar(100) y retorna el promedio de las notas
  */
 async function procesarNotas(data) {
-  // Tu código aquí
+  await esperar(100);
+  const promedio = data.notas.reduce((a, b) => a + b) / data.notas.length;
+  return {promedio};
 }
 
 /**
@@ -43,7 +49,16 @@ async function procesarNotas(data) {
  * Usa try/catch para manejar errores
  */
 async function obtenerPromedioUsuario() {
-  // Tu código aquí
+  try {
+    const usuario = await obtenerUsuario();
+    const data = await obtenerNotas(usuario.id);
+    const resultado = await procesarNotas(data);
+    return resultado;
+  }
+  catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
 }
 
 /**
@@ -52,8 +67,14 @@ async function obtenerPromedioUsuario() {
  * Sin usar async/await, solo promesas encadenadas
  */
 function obtenerPromedioConPromesas() {
-  // Tu código aquí
-}
+  return obtenerUsuario()
+  .then((usuario) => obtenerNotas(usuario.id))
+  .then((data) => procesarNotas(data))
+  .catch((error) => {
+    (console.error)('Error:', error);
+    throw error;
+    })
+  }
 
 /**
  * Ejercicio 7: Manejo de errores con async
@@ -61,7 +82,11 @@ function obtenerPromedioConPromesas() {
  * Usa throw new Error("Usuario no válido")
  */
 async function validarUsuario(usuarioId) {
-  // Tu código aquí
+  await esperar(50);
+  if (usuarioId === 0) {
+    throw new Error('Usuario no válido');
+  }
+  return {id: usuarioId, valido: true};
 }
 
 /**
@@ -70,7 +95,12 @@ async function validarUsuario(usuarioId) {
  * Debe ejecutar 3 funciones que retornan promesas en paralelo
  */
 async function operacionesParalelas() {
-  // Tu código aquí
+  const promesa1 = esperar(100).then(() => "resultado 1");
+  const promesa2 = esperar(150).then(() => "resultado 2");
+  const promesa3 = esperar(200).then(() => "resultado 3");
+  
+  const resultados = await Promise.all([promesa1, promesa2, promesa3]);
+  return resultados;
 }
 
 /**
@@ -84,7 +114,11 @@ function callbackAsincrono(valor, callback) {
 }
 
 async function convertirCallbackAsync(valor) {
-  // Tu código aquí - usa callbackAsincrono pero con async/await
+  return new Promise((resolve) => {
+    callbackAsincrono(valor, (resultado) => {
+      resolve(resultado);
+    });
+  });
 }
 
 /**
@@ -93,7 +127,18 @@ async function convertirCallbackAsync(valor) {
  * Demuestra que ambos enfoques pueden coexistir
  */
 async function flujoMixto() {
-  // Tu código aquí - usa await y then juntos
+  try {
+    const usuario = await obtenerUsuario();
+    return Promise.resolve(usuario)
+    .then((user) => obtenerNotas(user.id))
+    .then(async (data) => {
+      const resultado = await procesarNotas(data);
+      return resultado;
+    });
+  }   catch (error) {
+    console.error('Error en flujo mixto:', error);
+    throw error;
+  }
 }
 
 module.exports = {
