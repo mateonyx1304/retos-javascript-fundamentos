@@ -6,7 +6,9 @@
  * Debe retornar "mensaje retrasado" después del tiempo especificado
  */
 function mensajeRetrasado(callback) {
-  // Tu código aquí
+  setTimeout(() => {
+    callback('mensaje retrasado');
+  }, 2000);
 }
 
 /**
@@ -15,7 +17,9 @@ function mensajeRetrasado(callback) {
  * Después de 1.5 segundos, llama al callback con el string "datos recibidos"
  */
 function obtenerDatos(callback) {
-  // Tu código aquí
+  setTimeout(() => {
+    callback('datos recibidos');
+  }, 1500);
 }
 
 /**
@@ -25,7 +29,13 @@ function obtenerDatos(callback) {
  * Si es false, llama al callback con null y el error "falló la operación"
  */
 function operacionConError(exito, callback) {
-  // Tu código aquí
+  setTimeout(() => {
+    if (exito) {
+      callback('operación exitosa', null);
+    } else {
+      callback(null, 'falló la operación');
+    }
+  })
 }
 
 /**
@@ -36,15 +46,30 @@ function operacionConError(exito, callback) {
  * 3. procesarNotas → callback con "NOTAS PROCESADAS"
  */
 function obtenerInfoCompleta(callback) {
-  // Tu código aquí
+
+  setTimeout(() => {
+    const usuario = { id: 1, nombre: "Ana" };
+    setTimeout(() => {
+      const notas = ["nota1", "nota2"];
+      setTimeout(() => {
+        const resultado = "NOTAS PROCESADAS";
+        callback(`${usuario.nombre}: ${resultado}`, null);
+      }, 500);
+    }, 500);
+  }, 500);
 }
+
 
 /**
  * Ejercicio 5: Promesa básica
  * Crea una promesa que se resuelve después de 1 segundo con "promesa cumplida"
  */
 function promesaBasica() {
-  // Tu código aquí
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('promesa cumplida');
+    }, 1000);
+  });
 }
 
 /**
@@ -54,7 +79,15 @@ function promesaBasica() {
  * Si es false, rechaza con new Error("error en la operación")
  */
 function promesaConError(exito) {
-  // Tu código aquí
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (exito) {
+        resolve('éxito');
+      } else {
+        reject(new Error('error en la operación'));
+      }
+    }, 1000);
+  });
 }
 
 /**
@@ -63,7 +96,18 @@ function promesaConError(exito) {
  * Primera promesa resuelve con un número, segunda promesa duplica ese número
  */
 function encadenarPromesas() {
-  // Tu código aquí
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(5);
+    }, 1000)
+  })
+  .then((numero) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(numero * 2);
+      }, 1000);
+    });
+  })
 }
 
 /**
@@ -72,7 +116,11 @@ function encadenarPromesas() {
  * Después de 2 segundos resuelve con {data: "respuesta api"}
  */
 function simularApiCall() {
-  // Tu código aquí
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({data: 'respuesta api'});
+    }, 2000);
+  })
 }
 
 /**
@@ -81,7 +129,11 @@ function simularApiCall() {
  * Cada promesa resuelve con un string diferente
  */
 function multiplesPromesas() {
-  // Tu código aquí
+  const promesa1 = Promise.resolve('resultado 1');
+  const promesa2 = Promise.resolve('resultado 2');
+  const promesa3 = Promise.resolve('resultado 3');
+
+  return Promise.all([promesa1, promesa2, promesa3]);
 }
 
 /**
@@ -95,8 +147,13 @@ function callbackAPromesa(valor, callback) {
 }
 
 function convertirCallbackAPromesa(valor) {
-  // Tu código aquí - usa callbackAPromesa pero retorna una promesa
+ return new Promise((resolve) => {
+    callbackAPromesa(valor, (resultado) => {
+      resolve(resultado);
+    });
+  });
 }
+
 
 module.exports = {
   mensajeRetrasado,
